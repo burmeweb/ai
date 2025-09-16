@@ -1,7 +1,7 @@
 // Chat functionality
-import apiService from './api.js';
+import apiService from '../api.js';
 import storageManager from '../src/storage.js';
-import { showNotification, formatDate, generateId } from './utils.js';
+import { showNotification, formatDate, generateId } from '../utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize chat
