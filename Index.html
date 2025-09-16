@@ -6,8 +6,8 @@
     <title>Burme Assistant</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/animations.css">
 </head>
 <body class="bg-gradient-to-br from-purple-50 to-indigo-100 min-h-screen">
     <div class="flex items-center justify-center min-h-screen">
@@ -32,9 +32,9 @@
         // Check authentication state and redirect
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                window.location.href = 'pages/chat.html';
+                window.location.href = '../pages/chat.html';
             } else {
-                window.location.href = 'pages/auth.html';
+                window.location.href = '../pages/auth.html';
             }
         });
     </script>
