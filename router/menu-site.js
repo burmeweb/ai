@@ -109,4 +109,4 @@ function showNotification(message) {
             document.body.removeChild(notification);
         }, 500);
     }, 3000);
-}
+} 
