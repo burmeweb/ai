@@ -11,13 +11,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize navigation
     initNavigation();
+    
+    // Initialize logout functionality
+    initLogout();
 });
 
 function initMenuToggle() {
+    // Get menu elements
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
     const sideMenu = document.getElementById('sideMenu');
     
+    // Check if elements exist before adding event listeners
     if (mobileMenuBtn && closeMenuBtn && sideMenu) {
         mobileMenuBtn.addEventListener('click', function() {
             sideMenu.classList.add('open');
@@ -48,7 +53,8 @@ function initThemeToggle() {
     }
     
     // Check for saved theme preference
-    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (localStorage.getItem('theme') === 'dark' || 
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         html.classList.add('dark');
     }
 }
@@ -67,7 +73,7 @@ function initLanguageToggle() {
 
 function initNavigation() {
     // Handle navigation links
-    const navLinks = document.querySelectorAll('a[href^="pages/"]');
+    const navLinks = document.querySelectorAll('a[href^="pages/"], a[href^="./pages/"], a[href="../pages/"]');
     
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -83,7 +89,7 @@ function initNavigation() {
     
     // Highlight current page in navigation
     const currentPath = window.location.pathname;
-    const currentPage = currentPath.split('/').pop();
+    const currentPage = currentPath.split('/').pop() || 'index.html';
     
     navLinks.forEach(link => {
         const href = link.getAttribute('href');
@@ -93,10 +99,32 @@ function initNavigation() {
     });
 }
 
-function showNotification(message) {
+function initLogout() {
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtnMobile = document.getElementById('logoutBtnMobile');
+    
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
+    
+    if (logoutBtnMobile) {
+        logoutBtnMobile.addEventListener('click', handleLogout);
+    }
+}
+
+function handleLogout() {
+    // In a real implementation, you would implement Firebase logout
+    // For now, we'll just redirect to the auth page
+    localStorage.removeItem('user');
+    localStorage.removeItem('currentChatId');
+    window.location.href = 'pages/auth.html';
+}
+
+// Show notification function
+function showNotification(message, type = 'info') {
     // Create notification element
     const notification = document.createElement('div');
-    notification.className = 'fixed top-4 right-4 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+    notification.className = `fixed top-4 right-4 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in`;
     notification.textContent = message;
     
     // Add to DOM
@@ -106,7 +134,9 @@ function showNotification(message) {
     setTimeout(() => {
         notification.classList.add('animate-fade-out');
         setTimeout(() => {
-            document.body.removeChild(notification);
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
         }, 500);
     }, 3000);
-} 
+}
