@@ -57,4 +57,38 @@ burme-assistant/
 ├── package.json
 └── README.md
 ```
+# Burme Assistant
 
+Your intelligent companion for tasks and information.
+
+## Features
+
+- **Real-time Chat**: Interactive conversation with AI assistant
+- **Authentication**: Secure login with Firebase
+- **Responsive Design**: Works seamlessly on desktop and mobile
+- **Modern UI**: Beautiful animations and transitions
+- **Multi-language Support**: မြန်မာ, English, 中文, ไทย
+- **Dark Mode**: Automatic theme switching
+
+## Tech Stack
+
+- **Frontend**: HTML5, Tailwind CSS, JavaScript
+- **Backend**: Cloudflare Workers
+- **Database**: Firebase Firestore
+- **Authentication**: Firebase Auth
+- **Deployment**: Cloudflare Workers
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- Cloudflare account
+- Firebase account
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/burmeweb/ai.git
+cd ai
