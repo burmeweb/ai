@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wayne AI - Loading</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="apple-touch-icon" href="assets/logo/wayne-ai-logo.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Wayne AI">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .loader {
+            border-top-color: #4f46e5;
+            animation: spinner 1.5s linear infinite;
+        }
+        
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="animated-gradient min-h-screen flex flex-col items-center justify-center text-white">
+    <div class="container mx-auto px-4 text-center fade-in">
+        <div class="mb-8">
+            <img src="assets/logo/wayne-ai-logo.svg" alt="App Logo" class="w-24 h-24 mx-auto mb-6 rounded-full shadow-lg">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2">Wayne AI</h1>
+            <p class="text-xl opacity-90">Intelligent Conversations, Infinite Possibilities</p>
+        </div>
+        
+        <div class="flex justify-center mb-10">
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+        </div>
+        
+        <div class="mt-8">
+            <button id="enterApp" class="glow-button ripple bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full text-lg transition duration-300 ease-in-out transform">
+                Enter App
+            </button>
+        </div>
+        
+        <div class="mt-12 text-sm opacity-75">
+            <p>By continuing, you agree to our Terms of Service and Privacy Policy</p>
+        </div>
+        
+        <div class="mt-8">
+            <button id="installApp" class="hidden bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                Install App
+            </button>
+        </div>
+    </div>
+
+    <script src="src/index.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const enterButton = document.getElementById('enterApp');
+            const installButton = document.getElementById('installApp');
+            
+            enterButton.addEventListener('click', function() {
+                // Redirect to auth page
+                window.location.href = 'pages/auth.html';
+            });
+            
+            // Simulate loading completion
+            setTimeout(() => {
+                enterButton.classList.remove('opacity-0');
+                enterButton.classList.add('animate-pulse-slow');
+            }, 2000);
+            
+            // PWA Install button
+            let deferredPrompt;
+            
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent the mini-infobar from appearing on mobile
+                e.preventDefault();
+                // Stash the event so it can be triggered later.
+                deferredPrompt = e;
+                // Update UI to notify the user they can install the PWA
+                installButton.classList.remove('hidden');
+            });
+            
+            installButton.addEventListener('click', async () => {
+                // Hide the app provided install promotion
+                installButton.classList.add('hidden');
+                // Show the install prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                const { outcome } = await deferredPrompt.userChoice;
+                // Optionally, send analytics event with outcome of user choice
+                console.log(`User response to the install prompt: ${outcome}`);
+                // We've used the prompt, and can't use it again, throw it away
+                deferredPrompt = null;
+            });
+            
+            window.addEventListener('appinstalled', () => {
+                // Hide the app-provided install promotion
+                installButton.classList.add('hidden');
+                // Clear the deferredPrompt so it can be garbage collected
+                deferredPrompt = null;
+                // Optionally, send analytics event to indicate successful install
+                console.log('PWA was installed');
+            });
+        });
+        
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/src/serviceWorker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

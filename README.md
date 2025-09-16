@@ -1,94 +1,109 @@
-# BURME ASSISTANT 
-web and UI design 
+# Wayne AI
 
+Intelligent Conversations, Infinite Possibilities
 
-
-# project structure 
-```
-burme-assistant/
-├── public/
-│   ├── index.html
-│   ├── pages/
-│   │   ├── auth.html
-│   │   ├── chat.html
-│   │   ├── docs.html
-│   │   ├── settings.html
-│   │   └── about.html
-│   ├── assets/
-│   │   ├── logo/
-│   │   │   └── burme-logo.png
-│   │   ├── images/
-│   │   │   ├── user-avatar.jpg
-│   │   │   └── team/
-│   │   │       ├── aung-myo-kyaw.jpg
-│   │   │       ├── member-1.jpg
-│   │   │       ├── member-2.jpg
-│   │   │       └── member-3.jpg
-│   │   └── icons/
-│   │       ├── chat.svg
-│   │       ├── docs.svg
-│   │       ├── settings.svg
-│   │       ├── about.svg
-│   │       ├── search.svg
-│   │       ├── send.svg
-│   │       ├── paperclip.svg
-│   │       ├── microphone.svg
-│   │       ├── google.svg
-│   │       ├── facebook.svg
-│   │       ├── email.svg
-│   │       ├── phone.svg
-│   │       ├── location.svg
-│   │       └── creative.svg
-│   └── css/
-│       ├── main.css
-│       └── animations.css
-├── src/
-│   ├── js/
-│   │   ├── config.js
-│   │   ├── auth.js
-│   │   ├── chat.js
-│   │   ├── docs.js
-│   │   ├── settings.js
-│   │   └── about.js
-│   └── worker.js
-├── tailwind.config.js
-├── postcss.config.js
-├── wrangler.toml
-├── package.json
-└── README.md
-```
-# Burme Assistant
-
-Your intelligent companion for tasks and information.
+Wayne AI is an advanced AI assistant that helps you with a variety of tasks, from answering questions to generating images and code.
 
 ## Features
 
-- **Real-time Chat**: Interactive conversation with AI assistant
-- **Authentication**: Secure login with Firebase
-- **Responsive Design**: Works seamlessly on desktop and mobile
-- **Modern UI**: Beautiful animations and transitions
-- **Multi-language Support**: မြန်မာ, English, 中文, ไทย
-- **Dark Mode**: Automatic theme switching
-
-## Tech Stack
-
-- **Frontend**: HTML5, Tailwind CSS, JavaScript
-- **Backend**: Cloudflare Workers
-- **Database**: Firebase Firestore
-- **Authentication**: Firebase Auth
-- **Deployment**: Cloudflare Workers
+- **Conversational AI**: Engage in natural conversations with our advanced AI assistant
+- **Voice Support**: Speak naturally to Wayne AI and listen to responses
+- **Image Generation**: Create stunning images from text descriptions
+- **Code Generation**: Generate code in various programming languages
+- **Multi-language Support**: Available in English and Myanmar (Burmese)
+- **Dark/Light Mode**: Choose your preferred theme
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- Cloudflare account
-- Firebase account
+- A modern web browser (Chrome, Firefox, Safari, or Edge)
+- Internet connection
 
 ### Installation
 
-1. Clone the repository
-```bash
-git clone https://github.com/burmeweb/ai.git
-cd ai
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/burmeweb/wayne-ai.git
+   cd wayne-ai
+
+# install and run
+
+1. npm install
+2. npm run build
+3. npm run dev
+
+# Deploy
+```
+1. npm install -g wrangler
+2. wrangler login
+3. npm run deploy
+
+```
+# Configuration
+
+# Firebase
+
+1. Create a Firebase project at https://console.firebase.google.com/
+2. Enable Authentication and Firestore Database
+3. Copy your Firebase configuration and update src/firebaseConfig.js
+
+# Cloudflare Workers
+
+1. Create a Cloudflare account at https://workers.cloudflare.com/
+2. Get your Account ID and Zone ID
+3. Update wrangler.toml with your configuration
+
+# Usage
+
+1. Open index.html in your browser
+2. Sign up or sign in to your account
+3. Start chatting with Wayne AI
+
+# Project Structure
+```
+Project-Root/
+│
+├── index.html                      # Main entry point (Loader / Landing)
+│
+├── pages/                          # All main pages
+│   ├── auth.html                   # Login/Register/Reset
+│   ├── mainchat.html               # Chat dashboard
+│   ├── settings.html               # User settings
+│   ├── docs.html                   # Docs & usage
+│   └── about.html                  # About page
+│
+├── assets/                         # Static assets
+│   ├── icons/                      # SVG/PNG icons
+│   ├── logo/                       # App logos
+│   └── images/                     # Backgrounds, illustrations
+│
+├── js/                             # Page specific JS
+│   ├── main.js                     # Chat logic, animation effects
+│   ├── setting.js                  # Settings logic
+│   ├── docs.js                     # Docs search & list
+│   └── about.js                    # About page interactions
+│
+├── css/                            # Stylesheets
+│   ├── main.css                    # Global styles
+│   ├── setting.css                 # Settings page
+│   ├── docs.css                    # Docs page
+│   └── about.css                   # About page
+│
+├── src/                            # Core scripts
+│   ├── worker.js                   # Cloudflare Worker (API endpoint bridge)
+│   ├── firebaseConfig.js           # Firebase init & config
+│   ├── storage.js                  # Photo, voice, file storage
+│   └── language.js                 # Multi-language switch
+│
+├── router/
+│   └── menu-site.js                # Site navigation + menu toggle
+│
+├── wrangler.toml                   # Cloudflare worker config
+├── package.json                    # Dependencies & scripts
+└── README.md                       # Documentation
+```
+# Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.

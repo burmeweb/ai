@@ -1,0 +1,29 @@
+{
+  "name": "wayne-ai",
+  "version": "1.0.0",
+  "description": "Wayne AI - Intelligent Conversations, Infinite Possibilities",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tailwindcss -i ./css/input.css -o ./css/main.css --watch",
+    "build": "tailwindcss -i ./css/input.css -o ./css/main.css --minify",
+    "deploy": "wrangler publish"
+  },
+  "keywords": [
+    "ai",
+    "chat",
+    "assistant",
+    "wayne-ai"
+  ],
+  "author": "Aung Myo Kyaw",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^9.15.0",
+    "tailwindcss": "^3.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.8",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.19",
+    "wrangler": "^2.20.0"
+  }
+}

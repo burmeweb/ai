@@ -1,0 +1,16 @@
+name = "wayne-ai-worker"
+type = "javascript"
+account_id = "YOUR_ACCOUNT_ID"
+workers_dev = true
+route = ""
+zone_id = ""
+
+[build]
+command = "npm install && npm run build"
+
+[build.upload]
+format = "service-worker"
+
+[env.production]
+zone_id = "YOUR_ZONE_ID"
+route = "wayneai.com/*"
