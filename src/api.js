@@ -1,5 +1,5 @@
 // API service for communicating with the backend
-import { showNotification } from './utils.js';
+import { showNotification } from '../utils.js';
 
 class ApiService {
     constructor() {
