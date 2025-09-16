@@ -1,0 +1,95 @@
+/* Documentation Page Specific Styles */
+.docs-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Table of Contents Styles */
+.table-of-contents {
+    position: sticky;
+    top: 1rem;
+}
+
+.table-of-contents ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.table-of-contents li {
+    margin-bottom: 0.5rem;
+}
+
+.table-of-contents a {
+    display: block;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease;
+}
+
+.table-of-contents a:hover {
+    background-color: rgba(99, 102, 241, 0.1);
+}
+
+.table-of-contents a.active {
+    background-color: rgba(99, 102, 241, 0.2);
+    font-weight: 600;
+}
+
+/* Code Block Styles */
+.code-block {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 1rem 0;
+}
+
+.code-block pre {
+    margin: 0;
+}
+
+/* Callout Styles */
+.callout {
+    border-left: 4px solid;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0.375rem;
+}
+
+.callout-info {
+    border-color: #3b82f6;
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.callout-warning {
+    border-color: #f59e0b;
+    background-color: rgba(245, 158, 11, 0.1);
+}
+
+.callout-danger {
+    border-color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.callout-success {
+    border-color: #10b981;
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+/* Search Highlight Styles */
+.search-highlight {
+    background-color: rgba(251, 191, 36, 0.3);
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table-of-contents {
+        position: static;
+        margin-bottom: 2rem;
+    }
+}
