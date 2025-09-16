@@ -16,7 +16,7 @@ function initChat() {
     // Get current user
     const user = storageManager.get('user');
     if (!user) {
-        window.location.href = 'pages/auth.html';
+        window.location.href = '../pages/auth.html';
         return;
     }
 
