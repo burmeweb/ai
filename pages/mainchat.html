@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wayne AI - Chat</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .chat-container {
+            height: calc(100vh - 120px);
+            min-height: 400px;
+        }
+        
+        .message-bubble {
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .file-upload input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .voice-recording {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .voice-wave {
+            display: flex;
+            align-items: center;
+            height: 30px;
+        }
+        
+        .voice-bar {
+            width: 3px;
+            height: 100%;
+            background-color: #4f46e5;
+            margin: 0 2px;
+            border-radius: 3px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        
+        .voice-bar:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .voice-bar:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .voice-bar:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+        
+        .voice-bar:nth-child(5) {
+            animation-delay: 0.8s;
+        }
+        
+        @keyframes wave {
+            0%, 100% {
+                transform: scaleY(0.5);
+            }
+            50% {
+                transform: scaleY(1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuBtn" class="md:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-white dark:bg-gray-800 shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="menu-slide mobile-menu fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 z-40 p-6 shadow-lg">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI Logo" class="w-10 h-10 mr-3">
+                <h2 class="text-xl font-bold">Wayne AI</h2>
+            </div>
+            <button id="closeMenuBtn" class="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <div class="mb-8">
+            <div class="flex items-center p-3 bg-indigo-50 dark:bg-indigo-900 rounded-lg">
+                <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User" class="w-10 h-10 rounded-full mr-3">
+                <div>
+                    <p class="font-medium">John Doe</p>
+                    <p class="text-sm opacity-75">Online</p>
+                </div>
+            </div>
+        </div>
+        
+        <ul class="space-y-2 mb-8">
+            <li><a href="auth.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>Authentication</a></li>
+            <li><a href="mainchat.html" class="flex items-center p-3 rounded-lg bg-indigo-100 dark:bg-indigo-800"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>Chat</a></li>
+            <li><a href="settings.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>Settings</a></li>
+            <li><a href="docs.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>Documentation</a></li>
+            <li><a href="about.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>About</a></li>
+        </ul>
+        
+        <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                    <span>Dark Mode</span>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <button id="langToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                        </svg>
+                    </button>
+                    <span>Language</span>
+                </div>
+            </div>
+            
+            <button id="logoutBtn" class="w-full flex items-center justify-center p-3 rounded-lg bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="flex flex-col h-screen">
+        <!-- Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-md p-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI Logo" class="w-10 h-10 mr-3">
+                <h1 class="text-xl font-bold">Wayne AI</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="newChatBtn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700" title="New Chat">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                </button>
+                
+                <div class="relative">
+                    <button id="userMenuBtn" class="flex items-center focus:outline-none">
+                        <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User" class="w-10 h-10 rounded-full">
+                    </button>
+                    
+                    <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50">
+                        <a href="settings.html" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
+                        <a href="settings.html" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a>
+                        <button id="logoutBtnMobile" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+            <!-- Sidebar - Chat History -->
+            <aside class="w-full md:w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="font-semibold">Chat History</h2>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto">
+                    <div class="p-2">
+                        <div class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer bg-indigo-50 dark:bg-indigo-900">
+                            <h3 class="font-medium truncate">Current Chat</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">Hello, how can I help you today?</p>
+                        </div>
+                        
+                        <div class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer mt-1">
+                            <h3 class="font-medium truncate">Project Ideas</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">Can you suggest some project ideas?</p>
+                        </div>
+                        
+                        <div class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer mt-1">
+                            <h3 class="font-medium truncate">Code Review</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">Can you review this code for me?</p>
+                        </div>
+                        
+                        <div class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer mt-1">
+                            <h3 class="font-medium truncate">Research Help</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 truncate">I need help with my research...</p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Chat Area -->
+            <div class="flex-1 flex flex-col">
+                <!-- Messages Container -->
+                <div class="flex-1 overflow-y-auto p-4 chat-container bg-gray-50 dark:bg-gray-900">
+                    <div class="max-w-3xl mx-auto space-y-4">
+                        <!-- AI Message -->
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mr-3">
+                                <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI" class="w-10 h-10 rounded-full">
+                            </div>
+                            <div class="message-bubble bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
+                                <p>Hello! I'm Wayne AI, your intelligent assistant. How can I help you today?</p>
+                            </div>
+                        </div>
+                        
+                        <!-- User Message -->
+                        <div class="flex items-start justify-end">
+                            <div class="message-bubble bg-indigo-600 text-white rounded-lg p-4 shadow">
+                                <p>Hi Wayne! Can you tell me about the features of this app?</p>
+                            </div>
+                            <div class="flex-shrink-0 ml-3">
+                                <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User" class="w-10 h-10 rounded-full">
+                            </div>
+                        </div>
+                        
+                        <!-- AI Message with typing indicator -->
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mr-3">
+                                <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI" class="w-10 h-10 rounded-full">
+                            </div>
+                            <div class="message-bubble bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
+                                <div id="typingIndicator" class="typing-indicator">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div id="messageContent" class="hidden">
+                                    <p>Certainly! Wayne AI has several amazing features:</p>
+                                    <ul class="list-disc pl-5 mt-2">
+                                        <li>Real-time conversation with AI</li>
+                                        <li>Voice input and output support</li>
+                                        <li>Image generation capabilities</li>
+                                        <li>Code generation and explanation</li>
+                                        <li>Multi-language support</li>
+                                        <li>Dark and light mode themes</li>
+                                        <li>Chat history and search</li>
+                                    </ul>
+                                    <p class="mt-2">Is there anything specific you'd like to know more about?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Input Area -->
+                <div class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+                    <div class="max-w-3xl mx-auto">
+                        <div class="flex items-end space-x-2">
+                            <div class="flex-1">
+                                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-inner">
+                                    <textarea id="messageInput" rows="1" class="w-full bg-transparent border-0 focus:ring-0 resize-none py-3 px-4" placeholder="Type your message here..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <div class="file-upload">
+                                    <button class="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 ripple">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                        </svg>
+                                    </button>
+                                    <input type="file" id="fileInput" accept="image/*,audio/*,.pdf,.doc,.docx,.txt">
+                                </div>
+                                
+                                <button id="voiceBtn" class="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 ripple">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                    </svg>
+                                </button>
+                                
+                                <button id="sendBtn" class="p-3 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white ripple">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-2 flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                            <div id="voiceRecording" class="voice-recording hidden">
+                                <div class="voice-wave">
+                                    <div class="voice-bar"></div>
+                                    <div class="voice-bar"></div>
+                                    <div class="voice-bar"></div>
+                                    <div class="voice-bar"></div>
+                                    <div class="voice-bar"></div>
+                                </div>
+                                <span class="ml-2">Recording... Click to stop</span>
+                            </div>
+                            <div class="flex space-x-4">
+                                <button id="imageGenBtn" class="hover:text-indigo-600 dark:hover:text-indigo-400">Generate Image</button>
+                                <button id="codeGenBtn" class="hover:text-indigo-600 dark:hover:text-indigo-400">Generate Code</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Image Generation Modal -->
+    <div id="imageGenModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Generate Image</h3>
+                <button id="closeImageModal" class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label for="imagePrompt" class="block text-sm font-medium mb-1">Describe the image you want to generate</label>
+                <textarea id="imagePrompt" rows="3" class="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="A beautiful landscape with mountains and a lake..."></textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Image Style</label>
+                <select id="imageStyle" class="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option value="realistic">Realistic</option>
+                    <option value="artistic">Artistic</option>
+                    <option value="anime">Anime</option>
+                    <option value="cartoon">Cartoon</option>
+                    <option value="fantasy">Fantasy</option>
+                </select>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button id="cancelImageGen" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
+                <button id="generateImageBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">Generate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Generation Modal -->
+    <div id="codeGenModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Generate Code</h3>
+                <button id="closeCodeModal" class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label for="codePrompt" class="block text-sm font-medium mb-1">Describe the code you want to generate</label>
+                <textarea id="codePrompt" rows="3" class="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="A function that calculates the factorial of a number..."></textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Programming Language</label>
+                <select id="codeLanguage" class="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="csharp">C#</option>
+                    <option value="cpp">C++</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="php">PHP</option>
+                    <option value="ruby">Ruby</option>
+                    <option value="go">Go</option>
+                    <option value="rust">Rust</option>
+                    <option value="swift">Swift</option>
+                </select>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button id="cancelCodeGen" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
+                <button id="generateCodeBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">Generate</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menu toggle functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const sideMenu = document.getElementById('sideMenu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                sideMenu.classList.add('open');
+            });
+            
+            closeMenuBtn.addEventListener('click', function() {
+                sideMenu.classList.remove('open');
+            });
+            
+            // User menu toggle
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userMenu = document.getElementById('userMenu');
+            
+            userMenuBtn.addEventListener('click', function() {
+                userMenu.classList.toggle('hidden');
+            });
+            
+            // Close user menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+            
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
+            
+            themeToggle.addEventListener('click', function() {
+                html.classList.toggle('dark');
+                localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            });
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+            }
+            
+            // Logout functionality
+            const logoutBtn = document.getElementById('logoutBtn');
+            const logoutBtnMobile = document.getElementById('logoutBtnMobile');
+            
+            logoutBtn.addEventListener('click', function() {
+                // Here you would implement Firebase logout
+                window.location.href = 'auth.html';
+            });
+            
+            logoutBtnMobile.addEventListener('click', function() {
+                // Here you would implement Firebase logout
+                window.location.href = 'auth.html';
+            });
+            
+            // New chat button
+            const newChatBtn = document.getElementById('newChatBtn');
+            newChatBtn.addEventListener('click', function() {
+                // Clear chat history and start a new chat
+                const messagesContainer = document.querySelector('.chat-container .max-w-3xl');
+                messagesContainer.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-3">
+                            <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI" class="w-10 h-10 rounded-full">
+                        </div>
+                        <div class="message-bubble bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
+                            <p>Hello! I'm Wayne AI, your intelligent assistant. How can I help you today?</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Update chat history
+                const chatHistory = document.querySelector('.flex-1.overflow-y-auto .p-2');
+                const newChatItem = document.createElement('div');
+                newChatItem.className = 'p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer bg-indigo-50 dark:bg-indigo-900';
+                newChatItem.innerHTML = `
+                    <h3 class="font-medium truncate">New Chat</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate">Just started</p>
+                `;
+                
+                // Remove active class from previous chat
+                const activeChat = chatHistory.querySelector('.bg-indigo-50.dark\\:bg-indigo-900');
+                if (activeChat) {
+                    activeChat.classList.remove('bg-indigo-50', 'dark:bg-indigo-900');
+                }
+                
+                // Add new chat to the top
+                chatHistory.insertBefore(newChatItem, chatHistory.firstChild);
+            });
+            
+            // Message input functionality
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const messagesContainer = document.querySelector('.chat-container .max-w-3xl');
+            
+            // Auto-resize textarea
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Send message on Enter key (but not with Shift)
+            messageInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendBtn.click();
+                }
+            });
+            
+            // Send button functionality
+            sendBtn.addEventListener('click', function() {
+                const message = messageInput.value.trim();
+                if (message) {
+                    // Add user message to chat
+                    const userMessage = document.createElement('div');
+                    userMessage.className = 'flex items-start justify-end';
+                    userMessage.innerHTML = `
+                        <div class="message-bubble bg-indigo-600 text-white rounded-lg p-4 shadow">
+                            <p>${message}</p>
+                        </div>
+                        <div class="flex-shrink-0 ml-3">
+                            <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User" class="w-10 h-10 rounded-full">
+                        </div>
+                    `;
+                    messagesContainer.appendChild(userMessage);
+                    
+                    // Clear input
+                    messageInput.value = '';
+                    messageInput.style.height = 'auto';
+                    
+                    // Scroll to bottom
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    
+                    // Show typing indicator
+                    const typingMessage = document.createElement('div');
+                    typingMessage.className = 'flex items-start';
+                    typingMessage.innerHTML = `
+                        <div class="flex-shrink-0 mr-3">
+                            <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI" class="w-10 h-10 rounded-full">
+                        </div>
+                        <div class="message-bubble bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
+                            <div class="typing-indicator">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    `;
+                    messagesContainer.appendChild(typingMessage);
+                    
+                    // Scroll to bottom
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    
+                    // Simulate AI response after a delay
+                    setTimeout(() => {
+                        // Remove typing indicator
+                        messagesContainer.removeChild(typingMessage);
+                        
+                        // Add AI response
+                        const aiMessage = document.createElement('div');
+                        aiMessage.className = 'flex items-start';
+                        aiMessage.innerHTML = `
+                            <div class="flex-shrink-0 mr-3">
+                                <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI" class="w-10 h-10 rounded-full">
+                            </div>
+                            <div class="message-bubble bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
+                                <p>I received your message: "${message}". This is a simulated response. In a real implementation, this would be replaced with an actual AI response from an API.</p>
+                            </div>
+                        `;
+                        messagesContainer.appendChild(aiMessage);
+                        
+                        // Scroll to bottom
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }, 1500);
+                }
+            });
+            
+            // Voice recording functionality
+            const voiceBtn = document.getElementById('voiceBtn');
+            const voiceRecording = document.getElementById('voiceRecording');
+            let isRecording = false;
+            
+            voiceBtn.addEventListener('click', function() {
+                isRecording = !isRecording;
+                
+                if (isRecording) {
+                    voiceRecording.classList.remove('hidden');
+                    voiceBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                        </svg>
+                    `;
+                    
+                    // In a real implementation, you would start recording here
+                    // For demo purposes, we'll just simulate it
+                } else {
+                    voiceRecording.classList.add('hidden');
+                    voiceBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                        </svg>
+                    `;
+                    
+                    // In a real implementation, you would stop recording and process the audio here
+                    // For demo purposes, we'll add a simulated voice message
+                    messageInput.value = "This is a simulated voice message.";
+                }
+            });
+            
+            // File upload functionality
+            const fileInput = document.getElementById('fileInput');
+            
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // In a real implementation, you would upload the file here
+                    // For demo purposes, we'll just show a notification
+                    showNotification(`File "${file.name}" selected. In a real implementation, this would be uploaded.`);
+                }
+            });
+            
+            // Image generation modal
+            const imageGenBtn = document.getElementById('imageGenBtn');
+            const imageGenModal = document.getElementById('imageGenModal');
+            const closeImageModal = document.getElementById('closeImageModal');
+            const cancelImageGen = document.getElementById('cancelImageGen');
+            const generateImageBtn = document.getElementById('generateImageBtn');
+            
+            imageGenBtn.addEventListener('click', function() {
+                imageGenModal.classList.remove('hidden');
+            });
+            
+            closeImageModal.addEventListener('click', function() {
+                imageGenModal.classList.add('hidden');
+            });
+            
+            cancelImageGen.addEventListener('click', function() {
+                imageGenModal.classList.add('hidden');
+            });
+            
+            generateImageBtn.addEventListener('click', function() {
+                const imagePrompt = document.getElementById('imagePrompt').value;
+                const imageStyle = document.getElementById('imageStyle').value;
+                
+                if (imagePrompt) {
+                    // In a real implementation, you would send a request to an image generation API
+                    // For demo purposes, we'll just add a message to the chat
+                    messageInput.value = `Generate an image with the following description: "${imagePrompt}" in ${imageStyle} style.`;
+                    imageGenModal.classList.add('hidden');
+                    sendBtn.click();
+                }
+            });
+            
+            // Code generation modal
+            const codeGenBtn = document.getElementById('codeGenBtn');
+            const codeGenModal = document.getElementById('codeGenModal');
+            const closeCodeModal = document.getElementById('closeCodeModal');
+            const cancelCodeGen = document.getElementById('cancelCodeGen');
+            const generateCodeBtn = document.getElementById('generateCodeBtn');
+            
+            codeGenBtn.addEventListener('click', function() {
+                codeGenModal.classList.remove('hidden');
+            });
+            
+            closeCodeModal.addEventListener('click', function() {
+                codeGenModal.classList.add('hidden');
+            });
+            
+            cancelCodeGen.addEventListener('click', function() {
+                codeGenModal.classList.add('hidden');
+            });
+            
+            generateCodeBtn.addEventListener('click', function() {
+                const codePrompt = document.getElementById('codePrompt').value;
+                const codeLanguage = document.getElementById('codeLanguage').value;
+                
+                if (codePrompt) {
+                    // In a real implementation, you would send a request to a code generation API
+                    // For demo purposes, we'll just add a message to the chat
+                    messageInput.value = `Generate ${codeLanguage} code for: "${codePrompt}"`;
+                    codeGenModal.classList.add('hidden');
+                    sendBtn.click();
+                }
+            });
+            
+            // Simulate typing indicator after page load
+            setTimeout(() => {
+                const typingIndicator = document.getElementById('typingIndicator');
+                const messageContent = document.getElementById('messageContent');
+                
+                if (typingIndicator && messageContent) {
+                    typingIndicator.classList.add('hidden');
+                    messageContent.classList.remove('hidden');
+                }
+            }, 2000);
+            
+            // Notification function
+            function showNotification(message) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+                notification.textContent = message;
+                
+                // Add to DOM
+                document.body.appendChild(notification);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.classList.add('animate-fade-out');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 500);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

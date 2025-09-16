@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Wayne AI</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuBtn" class="md:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-white dark:bg-gray-800 shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="menu-slide mobile-menu fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 z-40 p-6 shadow-lg">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI Logo" class="w-10 h-10 mr-3">
+                <h2 class="text-xl font-bold">Wayne AI</h2>
+            </div>
+            <button id="closeMenuBtn" class="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <div class="mb-8">
+            <div class="flex items-center p-3 bg-indigo-50 dark:bg-indigo-900 rounded-lg">
+                <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User" class="w-10 h-10 rounded-full mr-3">
+                <div>
+                    <p class="font-medium">John Doe</p>
+                    <p class="text-sm opacity-75">Online</p>
+                </div>
+            </div>
+        </div>
+        
+        <ul class="space-y-2 mb-8">
+            <li><a href="auth.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>Authentication</a></li>
+            <li><a href="mainchat.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>Chat</a></li>
+            <li><a href="settings.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>Settings</a></li>
+            <li><a href="docs.html" class="flex items-center p-3 rounded-lg bg-indigo-100 dark:bg-indigo-800"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>Documentation</a></li>
+            <li><a href="about.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>About</a></li>
+        </ul>
+        
+        <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                    <span>Dark Mode</span>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <button id="langToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                        </svg>
+                    </button>
+                    <span>Language</span>
+                </div>
+            </div>
+            
+            <button id="logoutBtn" class="w-full flex items-center justify-center p-3 rounded-lg bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="flex flex-col h-screen">
+        <!-- Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-md p-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI Logo" class="w-10 h-10 mr-3">
+                <h1 class="text-xl font-bold">Documentation</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="Search documentation..." class="pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-64">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <div class="container mx-auto px-4 py-8 max-w-6xl">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <h2 class="text-2xl font-bold mb-2">Wayne AI Documentation</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Learn how to use Wayne AI to its full potential with our comprehensive guides and tutorials.</p>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row">
+                        <!-- Sidebar -->
+                        <div class="w-full md:w-64 border-r border-gray-200 dark:border-gray-700 p-4">
+                            <h3 class="font-semibold mb-4">Table of Contents</h3>
+                            <nav>
+                                <ul class="space-y-1">
+                                    <li><a href="#getting-started" class="block py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Getting Started</a></li>
+                                    <li><a href="#features" class="block py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Features</a></li>
+                                    <li><a href="#chat-interface" class="block py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Chat Interface</a></li>
+                                    <li><a href="#voice-support" class="block py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Voice Support</a></li>
+                                    <li><a href="#image-generation" class="block py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Image Generation</a></li>
+                                    <li><a href="#code-generation" class="block py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Code Generation</a></li>
+                                    <li><a href="#settings" class="block py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a></li>
+                                    <li><a href="#privacy" class="block py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Privacy & Security</a></li>
+                                    <li><a href="#faq" class="block py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">FAQ</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="flex-1 p-6">
+                            <!-- Getting Started -->
+                            <section id="getting-started" class="mb-12">
+                                <h2 class="text-2xl font-bold mb-4">Getting Started</h2>
+                                <p class="mb-4">Welcome to Wayne AI! This guide will help you get started with our intelligent chat assistant.</p>
+                                
+                                <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-4 mb-6">
+                                    <h3 class="font-semibold mb-2">Prerequisites</h3>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>A valid email address</li>
+                                        <li>A modern web browser (Chrome, Firefox, Safari, or Edge)</li>
+                                        <li>Internet connection</li>
+                                    </ul>
+                                </div>
+                                
+                                <h3 class="text-xl font-semibold mb-3">Creating an Account</h3>
+                                <ol class="list-decimal pl-5 space-y-2 mb-6">
+                                    <li>Visit the <a href="auth.html" class="text-indigo-600 hover:underline">sign-up page</a></li>
+                                    <li>Enter your email address and create a password</li>
+                                    <li>Verify your email address by clicking the link we send you</li>
+                                    <li>Log in with your new credentials</li>
+                                </ol>
+                                
+                                <h3 class="text-xl font-semibold mb-3">First Steps</h3>
+                                <p class="mb-4">Once you've logged in, you'll be taken to the main chat interface. Here's what you can do:</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Start a new conversation by typing in the input box at the bottom</li>
+                                    <li>Use the voice input button to speak your message instead of typing</li>
+                                    <li>Upload images or files for analysis</li>
+                                    <li>Generate images or code using the respective buttons</li>
+                                </ul>
+                            </section>
+                            
+                            <!-- Features -->
+                            <section id="features" class="mb-12">
+                                <h2 class="text-2xl font-bold mb-4">Features</h2>
+                                <p class="mb-4">Wayne AI offers a variety of features to enhance your productivity and creativity:</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                        <h3 class="font-semibold mb-2 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                            </svg>
+                                            Conversational AI
+                                        </h3>
+                                        <p>Engage in natural conversations with our advanced AI assistant that understands context and provides relevant responses.</p>
+                                    </div>
+                                    
+                                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                        <h3 class="font-semibold mb-2 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                            </svg>
+                                            Voice Input/Output
+                                        </h3>
+                                        <p>Speak naturally to Wayne AI and listen to responses with our advanced voice recognition and synthesis capabilities.</p>
+                                    </div>
+                                    
+                                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                        <h3 class="font-semibold mb-2 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            Image Generation
+                                        </h3>
+                                        <p>Create stunning images from text descriptions using our advanced AI image generation models.</p>
+                                    </div>
+                                    
+                                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                        <h3 class="font-semibold mb-2 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                            </svg>
+                                            Code Generation
+                                        </h3>
+                                        <p>Generate code in various programming languages based on your requirements and descriptions.</p>
+                                    </div>
+                                </div>
+                            </section>
+                            
+                            <!-- Chat Interface -->
+                            <section id="chat-interface" class="mb-12">
+                                <h2 class="text-2xl font-bold mb-4">Chat Interface</h2>
+                                <p class="mb-4">The chat interface is designed to be intuitive and easy to use. Here's a breakdown of its components:</p>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Message Area</h3>
+                                    <p>The main area displays the conversation between you and Wayne AI. Your messages appear on the right in blue, while Wayne AI's responses appear on the left in white.</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Input Controls</h3>
+                                    <p>At the bottom of the chat interface, you'll find several controls:</p>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li><strong>Text Input:</strong> Type your message here and press Enter or click the send button.</li>
+                                        <li><strong>Voice Button:</strong> Click to start voice input. Click again to stop.</li>
+                                        <li><strong>File Upload:</strong> Upload images or documents for analysis.</li>
+                                        <li><strong>Generate Image:</strong> Open the image generation modal.</li>
+                                        <li><strong>Generate Code:</strong> Open the code generation modal.</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Chat History</h3>
+                                    <p>On the left side of the interface, you'll find your chat history. Click on any previous conversation to load it.</p>
+                                </div>
+                            </section>
+                            
+                            <!-- Voice Support -->
+                            <section id="voice-support" class="mb-12">
+                                <h2 class="text-2xl font-bold mb-4">Voice Support</h2>
+                                <p class="mb-4">Wayne AI supports voice input and output for a hands-free experience:</p>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Voice Input</h3>
+                                    <p>To use voice input, click the microphone button in the input area. Speak naturally, and your words will be transcribed into text. Click the button again to stop recording.</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Voice Output</h3>
+                                    <p>Wayne AI can read responses aloud. To enable this feature, go to Settings > Appearance and enable "Voice Output". You can also adjust the voice speed and pitch in the same section.</p>
+                                </div>
+                                
+                                <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4">
+                                    <h3 class="font-semibold mb-2 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                        Note
+                                    </h3>
+                                    <p>Voice input requires microphone access, which you'll be prompted to allow the first time you use it. Voice output requires a stable internet connection.</p>
+                                </div>
+                            </section>
+                            
+                            <!-- Image Generation -->
+                            <section id="image-generation" class="mb-12">
+                                <h2 class="text-2xl font-bold mb-4">Image Generation</h2>
+                                <p class="mb-4">Wayne AI can generate images based on your text descriptions:</p>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">How to Generate Images</h3>
+                                    <ol class="list-decimal pl-5 space-y-2">
+                                        <li>Click the "Generate Image" button below the input area</li>
+                                        <li>Enter a detailed description of the image you want to create</li>
+                                        <li>Select a style (Realistic, Artistic, Anime, Cartoon, or Fantasy)</li>
+                                        <li>Click "Generate" and wait for the image to be created</li>
+                                        <li>Once generated, you can download or share the image</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Tips for Better Results</h3>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Be as descriptive as possible in your prompt</li>
+                                        <li>Include details about lighting, composition, and style</li>
+                                        <li>Specify the aspect ratio if you have a preference</li>
+                                        <li>Try different styles to see which works best for your concept</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                    <h3 class="font-semibold mb-2">Example Prompts</h3>
+                                    <ul class="space-y-2">
+                                        <li><em>"A serene landscape with mountains and a lake at sunset, realistic style"</em></li>
+                                        <li><em>"A futuristic city with flying cars, neon lights, anime style"</em></li>
+                                        <li><em>"A cute cartoon character reading a book in a cozy room"</em></li>
+                                    </ul>
+                                </div>
+                            </section>
+                            
+                            <!-- Code Generation -->
+                            <section id="code-generation" class="mb-12">
+                                <h2 class="text-2xl font-bold mb-4">Code Generation</h2>
+                                <p class="mb-4">Wayne AI can generate code in various programming languages based on your requirements:</p>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">How to Generate Code</h3>
+                                    <ol class="list-decimal pl-5 space-y-2">
+                                        <li>Click the "Generate Code" button below the input area</li>
+                                        <li>Describe what you want the code to do</li>
+                                        <li>Select the programming language</li>
+                                        <li>Click "Generate" and wait for the code to be created</li>
+                                        <li>Review the generated code and copy it to your clipboard</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Supported Languages</h3>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                        <div class="bg-gray-100 dark:bg-gray-700 rounded px-3 py-1 text-center">JavaScript</div>
+                                        <div class="bg-gray-100 dark:bg-gray-700 rounded px-3 py-1 text-center">Python</div>
+                                        <div class="bg-gray-100 dark:bg-gray-700 rounded px-3 py-1 text-center">Java</div>
+                                        <div class="bg-gray-100 dark:bg-gray-700 rounded px-3 py-1 text-center">C#</div>
+                                        <div class="bg-gray-100 dark:bg-gray-700 rounded px-3 py-1 text-center">C++</div>
+                                        <div class="bg-gray-100 dark:bg-gray-700 rounded px-3 py-1 text-center">HTML</div>
+                                        <div class="bg-gray-100 dark:bg-gray-700 rounded px-3 py-1 text-center">CSS</div>
+                                        <div class="bg-gray-100 dark:bg-gray-700 rounded px-3 py-1 text-center">PHP</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                    <h3 class="font-semibold mb-2">Example Prompts</h3>
+                                    <ul class="space-y-2">
+                                        <li><em>"A function that calculates the factorial of a number in Python"</em></li>
+                                        <li><em>"JavaScript code to validate an email address"</em></li>
+                                        <li><em>"Create a responsive navigation bar using HTML and CSS"</em></li>
+                                    </ul>
+                                </div>
+                            </section>
+                            
+                            <!-- Settings -->
+                            <section id="settings" class="mb-12">
+                                <h2 class="text-2xl font-bold mb-4">Settings</h2>
+                                <p class="mb-4">Customize your Wayne AI experience through the settings page:</p>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Profile Settings</h3>
+                                    <p>Update your profile information, including your name, bio, and profile picture. This information is used to personalize your experience.</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Account Settings</h3>
+                                    <p>Manage your account security, including password changes and two-factor authentication. You can also connect or disconnect social media accounts.</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Appearance Settings</h3>
+                                    <p>Customize the look and feel of Wayne AI. Choose between light and dark themes, adjust font size, and configure chat appearance options.</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Notification Settings</h3>
+                                    <p>Control how and when you receive notifications. You can set quiet hours and choose which types of notifications you want to receive.</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Privacy Settings</h3>
+                                    <p>Manage your data privacy preferences, including usage analytics, chat history, and data retention settings.</p>
+                                </div>
+                            </section>
+                            
+                            <!-- Privacy & Security -->
+                            <section id="privacy" class="mb-12">
+                                <h2 class="text-2xl font-bold mb-4">Privacy & Security</h2>
+                                <p class="mb-4">Your privacy and security are important to us. Here's how we protect your data:</p>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Data Encryption</h3>
+                                    <p>All communications between your device and our servers are encrypted using industry-standard encryption protocols.</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Data Storage</h3>
+                                    <p>Your chat history is stored securely and can be deleted at any time. We retain data only as long as necessary to provide our services.</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">Third-Party Services</h3>
+                                    <p>We use third-party services for certain features, such as image and code generation. These services have their own privacy policies, which we recommend you review.</p>
+                                </div>
+                                
+                                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                                    <h3 class="font-semibold mb-2">Your Rights</h3>
+                                    <p>You have the right to access, modify, or delete your personal data at any time. You can also download a copy of your data or request that we delete your account.</p>
+                                </div>
+                            </section>
+                            
+                            <!-- FAQ -->
+                            <section id="faq" class="mb-12">
+                                <h2 class="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+                                
+                                <div class="space-y-4">
+                                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <button class="faq-question w-full text-left p-4 font-medium flex justify-between items-center">
+                                            <span>How do I reset my password?</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
+                                        <div class="faq-answer hidden p-4 pt-0 border-t border-gray-200 dark:border-gray-700">
+                                            <p>To reset your password, go to the login page and click "Forgot password". Enter your email address, and we'll send you a link to reset your password.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <button class="faq-question w-full text-left p-4 font-medium flex justify-between items-center">
+                                            <span>Is there a limit to how much I can use Wayne AI?</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
+                                        <div class="faq-answer hidden p-4 pt-0 border-t border-gray-200 dark:border-gray-700">
+                                            <p>Free accounts have a monthly usage limit. Premium accounts have higher limits and additional features. You can check your current usage in the Account section of Settings.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <button class="faq-question w-full text-left p-4 font-medium flex justify-between items-center">
+                                            <span>Can I use Wayne AI on mobile devices?</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
+                                        <div class="faq-answer hidden p-4 pt-0 border-t border-gray-200 dark:border-gray-700">
+                                            <p>Yes, Wayne AI is fully responsive and works on all modern mobile devices. We also have dedicated mobile apps for iOS and Android, which you can download from the App Store or Google Play Store.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <button class="faq-question w-full text-left p-4 font-medium flex justify-between items-center">
+                                            <span>How do I report a problem or suggest a feature?</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
+                                        <div class="faq-answer hidden p-4 pt-0 border-t border-gray-200 dark:border-gray-700">
+                                            <p>You can report problems or suggest features by clicking the "Help" button in the bottom right corner of the interface. Alternatively, you can email us at support@wayneai.com.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <button class="faq-question w-full text-left p-4 font-medium flex justify-between items-center">
+                                            <span>Can I export my chat history?</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
+                                        <div class="faq-answer hidden p-4 pt-0 border-t border-gray-200 dark:border-gray-700">
+                                            <p>Yes, you can export your chat history by going to Settings > Privacy > Data Management and clicking "Download My Data". You'll receive an email with a link to download your data.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menu toggle functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const sideMenu = document.getElementById('sideMenu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                sideMenu.classList.add('open');
+            });
+            
+            closeMenuBtn.addEventListener('click', function() {
+                sideMenu.classList.remove('open');
+            });
+            
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
+            
+            themeToggle.addEventListener('click', function() {
+                html.classList.toggle('dark');
+                localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            });
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+            }
+            
+            // Logout functionality
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            logoutBtn.addEventListener('click', function() {
+                // Here you would implement Firebase logout
+                window.location.href = 'auth.html';
+            });
+            
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const sections = document.querySelectorAll('section');
+                
+                if (searchTerm === '') {
+                    // Show all sections if search is empty
+                    sections.forEach(section => {
+                        section.style.display = 'block';
+                    });
+                    return;
+                }
+                
+                sections.forEach(section => {
+                    const text = section.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+            
+            // FAQ accordion functionality
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('svg');
+                    
+                    // Toggle answer visibility
+                    answer.classList.toggle('hidden');
+                    
+                    // Rotate icon
+                    if (answer.classList.contains('hidden')) {
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
