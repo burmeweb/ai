@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wayne AI - Chat</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .chat-container {
+            height: calc(100vh - 120px);
+            min-height: 400px;
+        }
+        
+        .message-bubble {
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .file-upload input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .voice-recording {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .voice-wave {
+            display: flex;
+            align-items: center;
+            height: 30px;
+        }
+        
+        .voice-bar {
+            width: 3px;
+            height: 100%;
+            background-color: #4f46e5;
+            margin: 0 2px;
+            border-radius: 3px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        
+        .voice-bar:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .voice-bar:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .voice-bar:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+        
+        .voice-bar:nth-child(5) {
+            animation-delay: 0.8s;
+        }
+        
+        @keyframes wave {
+            0%, 100% {
+                transform: scaleY(0.5);
+            }
+            50% {
+                transform: scaleY(1);
+            }
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            dark:bg-gray-800;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        /* Code block styles */
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .copy-button:hover {
+            background-color: #4338ca;
+        }
+        
+        /* Image hover effect */
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 0.5rem;
+        }
+        
+        .image-container:hover .image-overlay {
+            opacity: 1;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .chat-container {
+                height: calc(100vh - 180px);
+            }
+            
+            .message-bubble {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuBtn" class="md:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-white dark:bg-gray-800 shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="menu-slide mobile-menu fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 z-40 p-6 shadow-lg">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI Logo" class="w-10 h-10 mr-3">
+                <h2 class="text-xl font-bold">Wayne AI</h2>
+            </div>
+            <button id="closeMenuBtn" class="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <div class="mb-8">
+            <div class="flex items-center p-3 bg-indigo-50 dark:bg-indigo-900 rounded-lg">
+                <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User" class="w-10 h-10 rounded-full mr-3">
+                <div>
+                    <p class="font-medium">John Doe</p>
+                    <p class="text-sm opacity-75">Online</p>
+                </div>
+            </div>
+        </div>
+        
+        <ul class="space-y-2 mb-8">
+            <li><a href="auth.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>Authentication</a></li>
+            <li><a href="mainchat.html" class="flex items-center p-3 rounded-lg bg-indigo-100 dark:bg-indigo-800"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>Chat</a></li>
+            <li><a href="settings.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>Settings</a></li>
+            <li><a href="docs.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>Documentation</a></li>
+            <li><a href="about.html" class="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>About</a></li>
+        </ul>
+        
+        <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                    <span>Dark Mode</span>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <button id="langToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                        </svg>
+                    </button>
+                    <span>Language</span>
+                </div>
+            </div>
+            
+            <button id="logoutBtn" class="w-full flex items-center justify-center p-3 rounded-lg bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="flex flex-col h-screen">
+        <!-- Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-md p-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI Logo" class="w-10 h-10 mr-3">
+                <h1 class="text-xl font-bold">Wayne AI</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="newChatBtn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700" title="New Chat">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                </button>
+                
+                <div class="relative">
+                    <button id="userMenuBtn" class="flex items-center focus:outline-none">
+                        <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User" class="w-10 h-10 rounded-full">
+                    </button>
+                    
+                    <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50">
+                        <a href="settings.html" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
+                        <a href="settings.html" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a>
+                        <button id="logoutBtnMobile" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="flex-1 overflow-hidden">
+            <div class="flex flex-col md:flex-row h-full">
+                <!-- Sidebar - Chat History -->
+                <aside class="w-full md:w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+                    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                        <h2 class="font-semibold">Chat History</h2>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto">
+                        <div class="p-2">
+                            <div class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer bg-indigo-50 dark:bg-indigo-900">
+                                <h3 class="font-medium truncate">Current Chat</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 truncate">Hello, how can I help you today?</p>
+                            </div>
+                            
+                            <div class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer mt-1">
+                                <h3 class="font-medium truncate">Project Ideas</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 truncate">Can you suggest some project ideas?</p>
+                            </div>
+                            
+                            <div class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer mt-1">
+                                <h3 class="font-medium truncate">Code Review</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 truncate">Can you review this code for me?</p>
+                            </div>
+                            
+                            <div class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer mt-1">
+                                <h3 class="font-medium truncate">Research Help</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 truncate">I need help with my research...</p>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                
+                <!-- Chat Area -->
+                <div class="flex-1 flex flex-col">
+                    <!-- Messages Container -->
+                    <div class="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
+                        <div class="max-w-3xl mx-auto space-y-4" id="messagesContainer">
+                            <!-- AI Message -->
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mr-3">
+                                    <img src="../assets/logo/wayne-ai-logo.svg" alt="Wayne AI" class="w-10 h-10 rounded-full">
+                                </div>
+                                <div class="message-bubble bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
+                                    <p>Hello! I'm Wayne AI, your intelligent assistant. How can I help you today?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Input Area -->
+                    <div class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+                        <div class="max-w-3xl mx-auto">
+                            <div class="flex items-end space-x-2">
+                                <div class="flex-1">
+                                    <div class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-inner">
+                                        <textarea id="messageInput" rows="1" class="w-full bg-transparent border-0 focus:ring-0 resize-none py-3 px-4" placeholder="Type your message here..."></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-2">
+                                    <div class="file-upload">
+                                        <button class="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 ripple">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                            </svg>
+                                        </button>
+                                        <input type="file" id="fileInput" accept="image/*,audio/*,.pdf,.doc,.docx,.txt">
+                                    </div>
+                                    
+                                    <button id="voiceBtn" class="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 ripple">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                        </svg>
+                                    </button>
+                                    
+                                    <button id="sendBtn" class="p-3 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white ripple">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-2 flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                                <div id="voiceRecording" class="voice-recording hidden">
+                                    <div class="voice-wave">
+                                        <div class="voice-bar"></div>
+                                        <div class="voice-bar"></div>
+                                        <div class="voice-bar"></div>
+                                        <div class="voice-bar"></div>
+                                        <div class="voice-bar"></div>
+                                    </div>
+                                    <span class="ml-2">Recording... Click to stop</span>
+                                </div>
+                                <div class="flex space-x-4">
+                                    <button id="textGenBtn" class="hover:text-indigo-600 dark:hover:text-indigo-400">Generate Text</button>
+                                    <button id="imageGenBtn" class="hover:text-indigo-600 dark:hover:text-indigo-400">Generate Image</button>
+                                    <button id="codeGenBtn" class="hover:text-indigo-600 dark:hover:text-indigo-400">Generate Code</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Text Generation Modal -->
+    <div id="textGenModal" class="modal">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Generate Text</h3>
+                <button id="closeTextModal" class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label for="textPrompt" class="block text-sm font-medium mb-1">Describe the text you want to generate</label>
+                <textarea id="textPrompt" rows="3" class="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Write a short story about a robot who becomes human..."></textarea>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button id="cancelTextGen" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
+                <button id="generateTextBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">Generate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Generation Modal -->
+    <div id="imageGenModal" class="modal">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Generate Image</h3>
+                <button id="closeImageModal" class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label for="imagePrompt" class="block text-sm font-medium mb-1">Describe the image you want to generate</label>
+                <textarea id="imagePrompt" rows="3" class="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="A beautiful landscape with mountains and a lake..."></textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Image Style</label>
+                <select id="imageStyle" class="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option value="realistic">Realistic</option>
+                    <option value="artistic">Artistic</option>
+                    <option value="anime">Anime</option>
+                    <option value="cartoon">Cartoon</option>
+                    <option value="fantasy">Fantasy</option>
+                </select>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button id="cancelImageGen" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
+                <button id="generateImageBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">Generate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Generation Modal -->
+    <div id="codeGenModal" class="modal">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Generate Code</h3>
+                <button id="closeCodeModal" class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label for="codePrompt" class="block text-sm font-medium mb-1">Describe the code you want to generate</label>
+                <textarea id="codePrompt" rows="3" class="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="A function that calculates the factorial of a number..."></textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Programming Language</label>
+                <select id="codeLanguage" class="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="csharp">C#</option>
+                    <option value="cpp">C++</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="php">PHP</option>
+                    <option value="ruby">Ruby</option>
+                    <option value="go">Go</option>
+                    <option value="rust">Rust</option>
+                    <option value="swift">Swift</option>
+                </select>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button id="cancelCodeGen" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
+                <button id="generateCodeBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">Generate</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/chat.js"></script>
+    <script src="../router/menu-site.js"></script>
+</body>
+</html>
