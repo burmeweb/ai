@@ -1,16 +1,9 @@
-name = "wayne-ai-worker"
-type = "javascript"
-account_id = "YOUR_ACCOUNT_ID"
-workers_dev = true
-route = ""
-zone_id = ""
+name = "gemini-worker"
+main = "worker.js"
+compatibility_date = "2024-09-01"
 
-[build]
-command = "npm install && npm run build"
-
-[build.upload]
-format = "service-worker"
+[vars]
+# optional static vars
 
 [env.production]
-zone_id = "YOUR_ZONE_ID"
-route = "wayneai.com/*"
+# nothing fancy here, production deploy
